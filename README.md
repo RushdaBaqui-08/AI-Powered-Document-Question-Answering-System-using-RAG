@@ -1,114 +1,89 @@
-# 🚀 AI-Powered Document Question Answering System using RAG
+# AI-Powered Document Question Answering System using RAG
 
-## 📌 Overview
-
-This project implements a **Retrieval-Augmented Generation (RAG)** pipeline to enable intelligent question answering over documents such as PDFs. It combines **semantic search** with **Large Language Models (LLMs)** to generate accurate, context-aware responses.
+A premium, simplified, stateless Retrieval-Augmented Generation (RAG) system that allows you to upload documents (PDF, CSV, JSON, DOCX), index them into a local Chroma vector store, and ask questions through a clean, unified single-screen web interface.
 
 ---
 
-## ⚙️ Features
+## ⚡ Core Features
 
-* 📄 Load and process multiple PDF documents
-* ✂️ Text chunking for efficient retrieval
-* 🔍 Semantic search using vector embeddings
-* 🤖 Context-aware answer generation using LLMs
-* ⚡ Scalable pipeline for document-based Q&A
-
----
-
-## 🧠 Tech Stack
-
-* **Language:** Python
-* **Frameworks/Libraries:** LangChain, LangChain Community
-* **Vector Store:** ChromaDB / Embeddings
-* **Document Processing:** PyPDF, PyMuPDF
-* **Text Splitting:** RecursiveCharacterTextSplitter
+- **Stateless Q&A Pipeline:** Simplified single-turn retrieval and generation (removes unnecessary session/agent-routing/critic overhead).
+- **Dual LLM Fail-Safe Fallback:** 
+  - Queries **Gemini 1.5 Flash** as the primary Q&A engine.
+  - Automatically falls back to **Groq (Llama 3.3 70B)** if Gemini hits free-tier rate limits (`429 Resource Exhausted`) or version mismatches.
+- **Single-Screen Unified UI:** Clean and responsive single-viewport design. Upload your files and chat on the same workspace layout (no abrupt sidebar transitions).
+- **ChromaDB Integration:** Indexes documents locally and uses HuggingFace embeddings (`all-MiniLM-L6-v2`) for semantic search.
 
 ---
 
-## 🔄 Pipeline Architecture
+## 🛠️ Tech Stack
 
-1. **Document Loading**
+- **Frontend:** React, Vite, Vanilla CSS (harmonized palettes, glassmorphism, micro-animations).
+- **Backend:** FastAPI, Python, Uvicorn, Pydantic.
+- **AI/RAG:** LangChain, ChromaDB, Google GenAI SDK, Groq SDK.
 
-   * Load PDFs from local directory (`data/pdfs`)
+---
 
-2. **Text Chunking**
+## 🚀 Setup & Execution
 
-   * Split documents into smaller chunks for better retrieval
+### 1. Prerequisites & Environment Setup
+Clone the repository and create a `.env` file in the root directory:
 
-3. **Embedding Generation**
+```bash
+# Clone the repository
+git clone https://github.com/RushdaBaqui-08/AI-Powered-Document-Question-Answering-System-using-RAG.git
+cd AI-Powered-Document-Question-Answering-System-using-RAG
+```
 
-   * Convert text chunks into vector representations
+Create a `.env` file in the root containing your API keys:
+```env
+GOOGLE_API_KEY=your_gemini_api_key_here
+GROQ_API_KEY=your_groq_api_key_here
+```
 
-4. **Vector Storage**
+### 2. Running the Backend Server
+Initialize the Python virtual environment, install dependencies, and run the FastAPI server:
 
-   * Store embeddings in vector database (ChromaDB)
+```bash
+# Create and activate virtual environment
+python3 -m venv .venv
+source .venv/bin/activate
 
-5. **Retrieval + Generation (RAG)**
+# Install dependencies
+pip install -r backend/requirements.txt
 
-   * Retrieve relevant chunks
-   * Pass context to LLM for answer generation
+# Run backend on port 8000
+uvicorn backend.main:app --host 127.0.0.1 --port 8000 --reload
+```
+
+The backend API will be available at `http://127.0.0.1:8000`. You can visit `/health` to verify it's running.
+
+### 3. Running the Frontend App
+Open a separate terminal, navigate to the `frontend` directory, install node modules, and start the development server:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Open `http://localhost:5173` in your browser to start querying your documents!
 
 ---
 
 ## 📂 Project Structure
 
 ```
-├── data/
-│   ├── pdfs/          # Input documents
-│   └── Python.txt     # Sample text file
-├── RAG_pipeline.ipynb
-├── README.md
+.
+├── backend/
+│   ├── main.py             # FastAPI App & Endpoints
+│   ├── rag_pipeline.py     # Simple similarity-based RAG pipeline & LLM fallback logic
+│   └── requirements.txt    # Python dependencies
+├── frontend/
+│   ├── src/
+│   │   ├── App.jsx         # Unified layout and state transitions
+│   │   ├── index.css       # Premium custom styling system
+│   │   └── main.jsx
+│   ├── package.json
+│   └── vite.config.js
+└── README.md               # Main instructions
 ```
-
----
-
-## ▶️ How to Run
-
-### 1. Install Dependencies
-
-```bash
-pip install langchain langchain-core langchain-community pypdf pymupdf sentence-transformers chromadb
-```
-
-### 2. Add Documents
-
-Place your PDF files inside:
-
-```
-data/pdfs/
-```
-
-### 3. Run Notebook
-
-Open and execute:
-
-```
-RAG_pipeline.ipynb
-```
-
----
-
-## 💡 Key Highlights
-
-* Efficient **multi-document retrieval system**
-* Modular pipeline (loading → chunking → embedding → retrieval)
-* Supports **scalable document processing**
-* Can be extended into APIs using FastAPI
-
----
-
-## 👩‍💻 Author
-
-**Rushda Baqui**
-
-* iOS Developer → Transitioning into AI & Data Science
-* Interested in building intelligent, scalable systems
-
----
-
-## ⭐ If you like this project
-
-Give it a ⭐ on GitHub!
-
----
